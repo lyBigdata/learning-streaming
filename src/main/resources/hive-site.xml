@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+<property>
+<name>hive.metastore.warehouse.dir</name>
+<value>/disk2/data/hive/warehouse</value>
+</property>
+
+<property>
+<name>hive.exec.scratdir</name>
+<value>/disk2/data/hive/tmp</value>
+</property> 
+
+<property>
+<name>hive.querylog.location</name>
+<value>/disk2/data/hive/log</value>
+</property>
+
+<property>
+<name>hive.metastore.warehouse.dir</name>
+<value>hdfs://nowledgedata-n7:9000/usr/hive/warehouse</value>
+</property>
+
+<property>
+<name>hive.exec.scratchdir</name>
+<value>hdfs://nowledgedata-n7:9000/usr/hive/warehouse</value>
+</property>
+
+<property>
+<name>hive.querylog.location</name>
+<value>/disk2/data/hive/log</value>
+ </property>
+
+<property>
+  <name>javax.jdo.option.ConnectionURL</name>
+  <value>jdbc:mysql://192.168.1.8:2849/hive?characterEncoding=UTF-8</value>
+  <description>JDBC connect string for a JDBC metastore</description>
+</property>
+
+<property>
+  <name>javax.jdo.option.ConnectionDriverName</name>
+  <value>com.mysql.jdbc.Driver</value>
+</property>
+
+<property>
+  <name>javax.jdo.option.ConnectionUserName</name>
+  <value>ndmp</value>
+</property>
+
+<property>
+  <name>javax.jdo.option.ConnectionPassword</name>
+  <value>123456</value>
+</property>
+
+<property>  
+  <name>hive.insert.into.multilevel.dirs</name>  
+  <value>true</value>  
+</property>  
+
+<property>
+   <name>hive.metastore.authorization.storage.checks</name>
+   <value>true</value>
+</property>
+
+<!--
+<property>
+<name>hive.aux.jars.path</name> 
+<value>file:///opt/software/hive/lib/ndmp-protobuf-0.12.0.jar,file:///opt/software/hive/lib/elasticproject-1.0-SNAPSHOT.jar,file:///opt/software/hive/lib/ndmp-etl-common-0.2.0.jar,file:///opt/software/hive/lib/mongo-hadoop-core-1.4.0.jar,file:///opt/software/hive/lib/mongo-hadoop-hive-1.4.0.jar,file:///opt/software/hive/lib/mongo-java-driver-2.12.5.jar,file:///opt/software/hive/lib/hive-protobuf-serde-0.1.2.jar,file:///opt/software/hive-0.13.1/lib/hive-hbase-handler-0.13.1.jar,file:///opt/software/hive-0.13.1/lib/hbase-client-0.96.1.1-hadoop2.jar,file:///opt/software/hive-0.13.1/lib/zookeeper-3.4.5.jar</value>
+</property>
+-->
+
+<property>
+  <name>hbase.zookeeper.quorum</name>
+  <value>nowledgedata-n7</value>
+</property>
+
+    <property>
+        <name>hive.server2.thrift.bind.host</name>
+        <value>0.0.0.0</value>
+        <description>Bind host on which to run the HiveServer2 Thrift interface.Can be overridden by setting$HIVE_SERVER2_THRIFT_BIND_HOST</description>
+    </property>
+
+<property>
+       <name>hive.server2.thrift.port</name>
+       <value>10000</value>
+       <description>Port number of HiveServer2 Thrift interface. Can be overridden by setting $HIVE_SERVER2_THRIFT_PORT</description>
+</property>
+  
+<property>
+  <name>hive.server2.authentication</name>
+  <value>NONE</value>
+</property>
+
+<property>
+  <name>hive.security.authorization.enabled</name>
+  <value>false</value>
+  <description>enable or disable the Hive client authorization</description>
+</property>
+
+<property>  
+  <name>hive.files.umask.value</name>  
+  <value>0002</value>  
+  <description>The dfs.umask value for the hive created folders</description>  
+</property>
+
+</configuration>
