@@ -21,6 +21,7 @@ import java.util.List;
  *
  * @author liuyu
  */
+
 public class MySparkSql {
     public static  void main(String[] args) {
 
@@ -67,10 +68,10 @@ public class MySparkSql {
         DataFrame count1 = sqlContext.sql("SELECT wifiMac,clientMac,(updateAt-firstAt) as countClient FROM mytable having countClient < 24*60*60*1000");
         count1.registerTempTable("newtable");
 
-        /*DataFrame count2= sqlContext.sql("SELECT clientMac,max(countClient) as countClient1 FROM newtable group by clientMac");
-        count2.registerTempTable("table1");*/
+        DataFrame count2= sqlContext.sql("SELECT clientMac,max(countClient) as countClient1 FROM newtable group by clientMac");
+        count2.registerTempTable("table1");
 
-        /**
+        /*
          * 平均访问时长
          */
         /*DataFrame count3= sqlContext.sql("SELECT count(distinct(clientMac)),sum(countClient1) FROM table1");
@@ -78,29 +79,36 @@ public class MySparkSql {
         count3.show();*/
 
 
-        /*LinkedList<DataFrame> list = new LinkedList<DataFrame>();
-        *//**
-         * 40分钟以内
-         *//*
-        DataFrame count5= sqlContext.sql("SELECT count(distinct(clientMac))as client ,sum(countClient1) as countdata FROM table1 where countClient1 <= 40*60*1000");
-        list.add(count5);
+        LinkedList<DataFrame> list = new LinkedList<DataFrame>();
 
-        *//**
+        /*
+         * 40分钟以内
+         */
+
+        /*DataFrame count5= sqlContext.sql("SELECT count(distinct(clientMac))as client ,sum(countClient1) as countdata FROM table1 where countClient1 <= 40*60*1000");
+        list.add(count5);
+        count5.show();
+        */
+        /*
          * 41分钟到2.5小时之间
-         *//*
+         */
         DataFrame count6= sqlContext.sql("SELECT count(distinct(clientMac))as client ,sum(countClient1) as countdata FROM table1 where countClient1 > 40*60*1000 and countClient1 < 2.5*60*60*1000");
         list.add(count6);
+        count6.show();
 
-        *//**
-         * 2.5小时以上
-         *//*
-        DataFrame count7= sqlContext.sql("SELECT count(distinct(clientMac))as client ,sum(countClient1) as countdata FROM table1 where countClient1 >= 2.5*60*60*1000");
+        /*
+        *2.5小时以上
+        */
+
+        /*DataFrame count7= sqlContext.sql("SELECT count(distinct(clientMac))as client ,sum(countClient1) as countdata FROM table1 where countClient1 >= 2.5*60*60*1000");
         list.add(count7);
+        count7.show();
 
         for(DataFrame df : list){
             df.show();
         }*/
 
+        /*
         DataFrame count8 = sqlContext.sql("SELECT wifiMac,clientMac,max(countClient) as countClient1 FROM newtable  group by wifiMac,clientMac ");
         count8.registerTempTable("table2");
         DataFrame sql1 = sqlContext.sql("SELECT wifiMac,count(distinct(clientMac))  as  client  FROM  table2 where countClient1 <= 40*60*1000 group by wifiMac ");
@@ -111,6 +119,6 @@ public class MySparkSql {
 
         sql1.show();
         sql2.show();
-        sql3.show();
+        sql3.show();*/
     }
 }
