@@ -25,9 +25,9 @@ import java.util.List;
 public class MySparkSql {
     public static  void main(String[] args) {
 
-        SparkConf conf = new SparkConf().setAppName("MySparkSql").setMaster("local[1]");
+        SparkConf conf = new SparkConf().setAppName("MySparkSql").setMaster("local[3]");
         JavaSparkContext jsc = new JavaSparkContext(conf);
-        JavaRDD<MyBean> javaRDD = jsc.textFile("file:///F:/Work/learning-streaming/src/main/resources/8.csv")
+        JavaRDD<MyBean> javaRDD = jsc.textFile("file:///C:/Users/ly/Downloads/12/12.csv")
                 .map(new Function<String, MyBean>() {
                     public MyBean call(String v1) throws Exception {
                         final String[] split = v1.split(",");
@@ -46,24 +46,13 @@ public class MySparkSql {
         dataframe.registerTempTable("mytable");
         dataframe.printSchema();
 
-        //SQL statements can be run by using the sql methods provided by sqlContext.
-        /*DataFrame countClient = sqlContext.sql("SELECT count(distinct(clientMac)) as countClient FROM mytable ");
+       /* //query total count月访问总量
+        sqlContext.sql("select count(distinct(clientMac)) from mytable").show();
+        //sqlContext.sql("select count(clientMac) from mytable").show();
+        //query every detector total  总览部分各区域访客
+        sqlContext.sql("select wifiMac, count(distinct(clientMac)) as num from mytable  group by wifiMac order by num desc").show();
+        //sqlContext.sql("select wifiMac, count(clientMac) as num from mytable  group by wifiMac order by num desc").show();*/
 
-        List<Row> rows = sqlContext.sql("SELECT distinct(wifiMac) FROM mytable ").collectAsList();
-
-        for(Row row : rows){
-            String str = row.get(0).toString();
-            DataFrame sql = sqlContext.sql("SELECT wifiMac,count(distinct(clientMac) as count) FROM mytable WHERE wifiMac='"+str+"'");
-            sql.show();
-        }*/
-
-       /*DataFrame count = sqlContext.sql("SELECT count(distinct(clientMac)) as countClient FROM mytable WHERE updateAt-firstAt >= 24*60*60*60*1000");
-        count.show();*/
-
-        //DataFrame sql = sqlContext.sql("SELECT count(clientMac) as countClient,clientMac FROM mytable  group by clientMac having countClient > 10 order by countClient asc");
-
-        /*sqlContext.sql("SELECT count(clientMac) as countClient,clientMac FROM mytable  group by clientMac having countClient > 10 order by countClient asc").select("clientMac").show();
-        System.out.println();*/
 
         DataFrame count1 = sqlContext.sql("SELECT wifiMac,clientMac,(updateAt-firstAt) as countClient FROM mytable having countClient < 24*60*60*1000");
         count1.registerTempTable("newtable");
@@ -75,50 +64,49 @@ public class MySparkSql {
          * 平均访问时长
          */
         /*DataFrame count3= sqlContext.sql("SELECT count(distinct(clientMac)),sum(countClient1) FROM table1");
-
         count3.show();*/
-
-
-        LinkedList<DataFrame> list = new LinkedList<DataFrame>();
 
         /*
          * 40分钟以内
          */
-
         /*DataFrame count5= sqlContext.sql("SELECT count(distinct(clientMac))as client ,sum(countClient1) as countdata FROM table1 where countClient1 <= 40*60*1000");
-        list.add(count5);
-        count5.show();
-        */
+        count5.show();*/
+
         /*
          * 41分钟到2.5小时之间
          */
         DataFrame count6= sqlContext.sql("SELECT count(distinct(clientMac))as client ,sum(countClient1) as countdata FROM table1 where countClient1 > 40*60*1000 and countClient1 < 2.5*60*60*1000");
-        list.add(count6);
         count6.show();
 
-        /*
-        *2.5小时以上
-        */
 
-        /*DataFrame count7= sqlContext.sql("SELECT count(distinct(clientMac))as client ,sum(countClient1) as countdata FROM table1 where countClient1 >= 2.5*60*60*1000");
-        list.add(count7);
+        //2.5小时以上
+        DataFrame count7= sqlContext.sql("SELECT count(distinct(clientMac))as client ,sum(countClient1) as countdata FROM table1 where countClient1 >= 2.5*60*60*1000");
         count7.show();
 
-        for(DataFrame df : list){
-            df.show();
-        }*/
+       /* DataFrame count8 = sqlContext.sql("SELECT wifiMac,clientMac,max(countClient) as countClient1 FROM newtable  group by wifiMac,clientMac ");
+        count8.registerTempTable("table2");*/
+        //访问时长小于40分钟的各区域访问量
+        /*DataFrame sql1 = sqlContext.sql("SELECT wifiMac,count(distinct(clientMac))  as  client  FROM  table2 where countClient1 <= 40*60*1000 group by wifiMac ");
+        sql1.show();*/
 
-        /*
-        DataFrame count8 = sqlContext.sql("SELECT wifiMac,clientMac,max(countClient) as countClient1 FROM newtable  group by wifiMac,clientMac ");
-        count8.registerTempTable("table2");
-        DataFrame sql1 = sqlContext.sql("SELECT wifiMac,count(distinct(clientMac))  as  client  FROM  table2 where countClient1 <= 40*60*1000 group by wifiMac ");
+        //访问时长大于40分钟而小于2.5小时的各区域访问量
+        /*DataFrame sql2 = sqlContext.sql("SELECT wifiMac,count(distinct(clientMac))  as  client  FROM  table2 where  countClient1 > 40*60*1000 and countClient1 < 2.5*60*60*1000  group by wifiMac ");
+        sql2.show();*/
 
-        DataFrame sql2 = sqlContext.sql("SELECT wifiMac,count(distinct(clientMac))  as  client  FROM  table2 where  countClient1 > 40*60*1000 and countClient1 < 2.5*60*60*1000  group by wifiMac ");
-
-        DataFrame sql3 = sqlContext.sql("SELECT wifiMac,count(distinct(clientMac))  as  client  FROM  table2  where countClient1 >= 2.5*60*60*1000 group by wifiMac ");
-
-        sql1.show();
-        sql2.show();
+        //访问时长大于2.5小时的各区域访问量
+        /*DataFrame sql3 = sqlContext.sql("SELECT wifiMac,count(distinct(clientMac))  as  client  FROM  table2  where countClient1 >= 2.5*60*60*1000 group by wifiMac ");
         sql3.show();*/
+
+
+        /**
+         map.put("78:d3:8d:c3:c2:d5", "歇马台");
+         map.put("78:d3:8d:ca:9a:cd", "游客中心");
+         map.put("78:d3:8d:ca:9c:c9", "碾旁湾");
+         map.put("78:d3:8d:cf:16:b4", "海潮寺");
+         map.put("78:d3:8d:cf:16:b8", "万安关");
+         map.put("78:d3:8d:cf:16:cc", "绣花楼");
+         map.put("78:d3:8d:cf:16:d0", "飞龙关");
+         map.put("78:d3:8d:cf:16:d4", "监控中心");
+         */
     }
 }
