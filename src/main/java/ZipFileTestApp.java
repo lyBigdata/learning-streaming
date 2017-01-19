@@ -75,30 +75,46 @@ public class ZipFileTestApp {
 
         try {
             // Initiate ZipFile object with the path/name of the zip file.
-            ZipFile zipFile = new ZipFile("f:\\addFilesWithStandardZipEncryption.zip");
+            ZipFile zipFile = new ZipFile("f:\\photo-aes.zip");
 
             // Folder to add
-            String folderToAdd = "f:\\unziptest";
+            String folderToAdd = "C:\\Users\\ly\\photo";
 
             // Initiate Zip Parameters which define various properties such
             // as compression method, etc.
             ZipParameters parameters = new ZipParameters();
 
-            // set compression method to store compression
-            parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
-
-            // Set the compression level
             parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
+
+            // Set the encryption flag to true
+            // If this is set to false, then the rest of encryption properties are ignored
+            parameters.setEncryptFiles(true);
+
+            // Set the encryption method to Standard Zip Encryption
+
+            //================================================================
+            //标准压缩
+            //parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_STANDARD);
+            //================================================================
+
+            //##############################################################
+            //使用AES压缩算法
+            parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
+            parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
+            //##############################################################
+
+            // Set password
+            parameters.setPassword("nowledgedata.com.cn");
 
             // Add folder to the zip file
             zipFile.addFolder(folderToAdd, parameters);
-
         } catch (ZipException e) {
             e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
-        new ZipFileTestApp().addFilesWithStandardZipEncryption();
+        //new ZipFileTestApp().addFilesWithStandardZipEncryption();
+        new ZipFileTestApp().AddFolder();
     }
 }
