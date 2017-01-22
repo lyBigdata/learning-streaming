@@ -107,6 +107,9 @@ public class FtpClientTest {
             ftp.connect(host, port);
             // 如果采用默认端口，可以使用ftp.connect(host)的方式直接连接FTP服务器
             ftp.login(username, password);// 登录
+
+            ftp.enterLocalPassiveMode();
+
             reply = ftp.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
                 ftp.disconnect();
