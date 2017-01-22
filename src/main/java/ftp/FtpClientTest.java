@@ -147,6 +147,8 @@ public class FtpClientTest {
         //http://blog.csdn.net/u010154760/article/details/45458219
         try{
             boolean file = FtpClientTest.uploadFile("202.101.104.126", 60021, "yunchou", "yunchou@2017", "/datahub/", "test", "README.zip", new FileInputStream(new File("C:\\Users\\ly\\Desktop\\README.zip")));
+
+            //boolean fileFtpClientTest.downloadFile("202.101.104.126", 60021, "yunchou", "yunchou@2017", "/datahub/","README.md","e:/");
             System.out.println(file);
         }catch (Exception e){
             e.printStackTrace();
